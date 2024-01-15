@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.Email;
 using System;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace BrainstormSessions
 {
@@ -10,7 +11,7 @@ namespace BrainstormSessions
     {
         public static void Main(string[] args)
         {
-/*            var config = new EmailConnectionInfo()
+           var config = new EmailConnectionInfo()
             {
                 EmailSubject = "Log Email",
                 FromEmail = "from@gmail.com",
@@ -20,10 +21,8 @@ namespace BrainstormSessions
             };
 
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Email(config)
-                .CreateLogger();*/
-            Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
+                .WriteTo.Email(config)
                 .WriteTo.Console()
                 .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
