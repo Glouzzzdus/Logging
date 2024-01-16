@@ -19,6 +19,7 @@ namespace BrainstormSessions.Test.UnitTests
         public LoggingTests()
         {
             Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .WriteTo.InMemory()
                 .CreateLogger();
         }
@@ -26,10 +27,6 @@ namespace BrainstormSessions.Test.UnitTests
         public void Dispose()
         {
             Log.CloseAndFlush();
-
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.InMemory()
-                .CreateLogger();
         }
 
         [Fact]
@@ -88,12 +85,8 @@ namespace BrainstormSessions.Test.UnitTests
         public async Task SessionController_Index_LogDebugMessages()
         {
             // Arrange
-            int testSessionId = 1;
-            var mockRepo = new Mock<IBrainstormSessionRepository>();
-            mockRepo.Setup(repo => repo.GetByIdAsync(testSessionId))
-                .ReturnsAsync(GetTestSessions().FirstOrDefault(
-                    s => s.Id == testSessionId));
-            var controller = new SessionController(mockRepo.Object);
+            int? testSessionId = null;           
+            var controller = new SessionController(null);
 
             // Act
             var result = await controller.Index(testSessionId);
